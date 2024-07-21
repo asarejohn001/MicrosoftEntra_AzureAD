@@ -69,6 +69,7 @@ foreach ($user in $users) {
             employeeType = $user.EmployeeType
             officeLocation = $user.OfficeLocation
             passwordProfile = $passwordProfile
+            usagelocation   = "US"
         }
         $newUser = New-MgUser -BodyParameter $userDetails
         $successMessage = "Created user: $($user.UserPrincipalName)"
