@@ -6,7 +6,7 @@ User account provision. Read more about this script at https://github.com/asarej
 #>
 
 # Install Microsoft Graph PowerShell module if you haven't already
-Install-Module Microsoft.Graph -Scope CurrentUser
+#Install-Module Microsoft.Graph -Scope CurrentUser
 
 # Import the Microsoft Graph PowerShell module
 Import-Module Microsoft.Graph
@@ -20,7 +20,7 @@ $scopes = @(
 )
 
 # Connect to Microsoft Graph
-Connect-MgGraph -Scopes $scopes
+Connect-MgGraph -Scopes $scopes -NoWelcome
 
 # Verify the connection
 $tenantDetails = Get-MgOrganization
