@@ -1,7 +1,6 @@
 # UserAccountProvisioning
 
-This PowerShell scrip will create an account in your Office 365 tenant.
-Here are the things it will do:
+This PowerShell scrip will create an account in your Microsoft Entra tenant. Here are the things it will do:
 1. Create user account in Office 365 tenant using account properties from a csv
 2. Edit the account's properties to match the info from the csv
 3. Assign a temporary password and disable the account
