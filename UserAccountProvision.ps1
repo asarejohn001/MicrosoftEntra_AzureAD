@@ -26,14 +26,8 @@ $csvPath = "./New Hires.csv"
 # Path to the error log file
 $errorLogPath = "./Log.txt"
 
-# Import the CSV file
-$users = Import-Csv -Path $csvPath
-
-# Initialize error count
-$errorCount = 0
-
 # Function to log errors with a timestamp
-function Log-Error {
+function Update-LogFile {
     param (
         [string]$message,
         [string]$logFilePath
@@ -43,17 +37,23 @@ function Log-Error {
     Add-Content -Path $logFilePath -Value $logMessage
 }
 
+# Import the CSV file
+$users = Import-Csv -Path $csvPath
+
+# Initialize error count
+$errorCount = 0
+
 # Loop through each user in the CSV
 foreach ($user in $users) {
     try {
         # Create a password profile for the user
         $passwordProfile = @{
             forceChangePasswordNextSignIn = $true
-            password = "InitialPassword123!" # You can generate a more secure password or handle this as needed
+            password = "InitialPassword123!" # Generate a more secure password as needed
         }
 
         # Generate user principal name (UPN) and mail nickname
-        $upn = "$($user.FirstName).$($user.LastName)@ajgroupservice.com"
+        $upn = "$($user.FirstName).$($user.LastName)@yourdomain.com"
         $mailNickname = "$($user.FirstName)$($user.LastName)"
 
         # Create the user
@@ -68,39 +68,41 @@ foreach ($user in $users) {
             employeeId = $user.EmployeeID
             employeeType = $user.EmployeeType
             officeLocation = $user.OfficeLocation
+            usageLocation = "US"
             passwordProfile = $passwordProfile
-            usagelocation   = "US"
         }
+
         $newUser = New-MgUser -BodyParameter $userDetails
-        $successMessage = "Created user: $($user.UserPrincipalName)"
-        Log-Error -message $successMessage -logFilePath $errorLogPath
-        Write-Host "successfully created accounts"
+        $successMessage = "Successfully created account for $($user.FirstName) $($user.LastName): $($_.Exception.Message)"
+        Update-LogFile -message $successMessage -logFilePath $errorLogPath
+        Write-Host "Account created, check the log file"
 
-        # Delay for about 1 minite to ensure the account is fully created
-        Start-Sleep -Seconds 60
+        # Wait for the user to be fully created before updating
+        Start-Sleep -Seconds 30
 
-        # Update the user's hire date in a subsequent PATCH request
+        # Update the user's employee hire date
         $hireDateDetails = @{
-            hireDate = $user.EmployeeHireDate
+            employeeHireDate = $user.EmployeeHireDate
         }
+
         Update-MgUser -UserId $newUser.Id -BodyParameter $hireDateDetails
 
     } catch {
-        # Log the error to a file and increment the error count
-        $errorMessage = "Error creating user $($user.FirstName) $($user.LastName): $($_.Exception.Message)"
-        Log-Error -message $errorMessage -logFilePath $errorLogPath
+        # Log the error using the Log-Error function
+        $errorMessage = "Error creating/updating user $($user.FirstName) $($user.LastName): $($_.Exception.Message)"
+        Update-LogFile -message $errorMessage -logFilePath $errorLogPath
         $errorCount++
-        Write-Host "There were issues creating the accounts. Check the log file for more details"
-        break
+        Write-Host "Failed to create account, check log file"
     }
 }
 
 # Output final status
 if ($errorCount -eq 0) {
-    Write-Host "All users have been created successfully."
+    Write-Host "All users have been processed successfully."
 } else {
-    Write-Host "There were errors during user creation. Please check the log file at $errorLogPath for details."
+    Write-Host "There were errors during user processing. Please check the log file at $errorLogPath for details."
 }
+
 
 # Disconnect from Microsoft Graph
 Disconnect-Graph
