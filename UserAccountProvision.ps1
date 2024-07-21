@@ -86,3 +86,6 @@ if ($errorCount -eq 0) {
 } else {
     Write-Host "There were errors during user creation. Please check the log file at $errorLogPath for details."
 }
+
+# Disconnect from Microsoft Graph
+Disconnect-Graph
