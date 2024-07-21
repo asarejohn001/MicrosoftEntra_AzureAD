@@ -18,9 +18,9 @@ $scopes = @(
 Connect-MgGraph -Scopes $scopes
 
 # Path to the CSV file
-$csvPath = "/path/to/your/users_to_delete.csv"
+$csvPath = "./offboard.csv"
 # Path to the error log file
-$errorLogPath = "/path/to/delete_error.log"
+$errorLogPath = "./Log.txt"
 
 # Import the CSV file
 $users = Import-Csv -Path $csvPath
