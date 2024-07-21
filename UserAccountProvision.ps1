@@ -8,7 +8,6 @@ User account provision. Read more about this script at https://github.com/asarej
 # Install the Microsoft.Graph if not already
 #Install-Module Microsoft.Graph -Scope CurrentUser
 
-
 # Import the Microsoft Graph PowerShell module
 Import-Module Microsoft.Graph
 
@@ -43,7 +42,7 @@ foreach ($user in $users) {
         }
 
         # Generate user principal name (UPN) and mail nickname
-        $upn = "$($user.FirstName).$($user.LastName)@yourdomain.com"
+        $upn = "$($user.FirstName).$($user.LastName)@ajgroupservice.com"
         $mailNickname = "$($user.FirstName)$($user.LastName)"
 
         # Create the user
