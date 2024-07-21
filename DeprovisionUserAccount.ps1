@@ -19,6 +19,7 @@ Connect-MgGraph -Scopes $scopes
 
 # Path to the CSV file
 $csvPath = "./offboard.csv"
+
 # Path to the error log file
 $errorLogPath = "./Log.txt"
 
@@ -35,8 +36,13 @@ foreach ($user in $users) {
         Remove-MgUser -UserId $user.UserPrincipalName -Confirm:$false
         Write-Host "Deleted user: $($user.UserPrincipalName)"
     } catch {
-        # Log the error to a file and increment the error count
-        $errorMessage = "Error deleting user $($user.UserPrincipalName): $($_.Exception.Message)"
+        # Get the current date and time
+        $dateTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+
+        # Format the error message
+        $errorMessage = "$dateTime - Error deleting user $($user.UserPrincipalName): $($_.Exception.Message)"
+        
+        # Log the error to a file
         Add-Content -Path $errorLogPath -Value $errorMessage
         $errorCount++
         Write-Host $errorMessage
@@ -45,7 +51,7 @@ foreach ($user in $users) {
 
 # Output final status
 if ($errorCount -eq 0) {
-    Write-Host "All users have been deleted successfully."
+    Write-Host "All users have been processed successfully."
 } else {
     Write-Host "There were errors during user deletion. Please check the log file at $errorLogPath for details."
 }

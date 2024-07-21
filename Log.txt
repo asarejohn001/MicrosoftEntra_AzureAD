@@ -1,2 +1,4 @@
 Error creating user John Doe: Cannot bind argument to parameter 'UserId' because it is an empty string.
 Error creating user John Doe: Cannot bind argument to parameter 'UserId' because it is an empty string.
+2024-07-20 23:29:56 - Error deleting user : Cannot bind argument to parameter 'UserId' because it is an empty string.
+2024-07-20 23:29:56 - Error deleting user : Cannot bind argument to parameter 'UserId' because it is an empty string.
