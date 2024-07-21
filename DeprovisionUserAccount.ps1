@@ -29,23 +29,30 @@ $users = Import-Csv -Path $csvPath
 # Initialize error count
 $errorCount = 0
 
+function Update-LogFile {
+    param (
+        [string]$message,
+        [string]$logFilePath
+    )
+    $dateTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logMessage = "$dateTime - $message"
+    Add-Content -Path $logFilePath -Value $logMessage
+}
+
 # Loop through each user in the CSV
 foreach ($user in $users) {
     try {
         # Delete the user
         Remove-MgUser -UserId $user.UserPrincipalName -Confirm:$false
-        Write-Host "Deleted user: $($user.UserPrincipalName)"
-    } catch {
-        # Get the current date and time
-        $dateTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        $successMessage = "Deleted user: $($user.UserPrincipalName)"
+        Update-LogFile -message $successMessage -logFilePath $errorLogPath
+        Write-Host "User accounts deleted, check log file"
 
-        # Format the error message
-        $errorMessage = "$dateTime - Error deleting user $($user.UserPrincipalName): $($_.Exception.Message)"
-        
-        # Log the error to a file
-        Add-Content -Path $errorLogPath -Value $errorMessage
+    } catch {
+        $errorMessage - "Failed to delete user: $($user.UserPrincipalName)"
+        Update-LogFile -message $errorMessage -logFilePath $errorLogPath
         $errorCount++
-        Write-Host $errorMessage
+        Write-Host "Failed to delete account, check log file"
     }
 }
 
