@@ -59,8 +59,10 @@ foreach ($user in $users) {
             officeLocation = $user.OfficeLocation
             passwordProfile = $passwordProfile
         }
-
         $newUser = New-MgUser -BodyParameter $userDetails
+
+        # Delay for about 1 minite to ensure the account is fully created
+        Start-Sleep -Seconds 60
 
         # Update the user's hire date in a subsequent PATCH request
         $hireDateDetails = @{
