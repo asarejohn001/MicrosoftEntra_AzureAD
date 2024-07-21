@@ -15,7 +15,7 @@ Import-Module AzureAD
 Connect-AzureAD
 
 # Path to the CSV file
-$csvPath = "C:\path\to\your\users.csv"
+$csvPath = "./New Hires.csv"
 
 # Import the CSV file
 $users = Import-Csv -Path $csvPath
