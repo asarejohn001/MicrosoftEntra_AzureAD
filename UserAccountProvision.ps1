@@ -6,10 +6,12 @@ User account provision. Read more about this script at https://github.com/asarej
 #>
 
 # Install the AzureAD module if you haven't already
-Install-Module AzureAD -Scope CurrentUser
+Install-Module AzureAD
+Install-Module AzureAD.Standard.Preview
 
 # Import the Azure AD module
 Import-Module AzureAD
+Import-Module AzureAD.Standard.Preview
 
 # Connect to Azure AD
 Connect-AzureAD
@@ -49,4 +51,3 @@ foreach ($user in $users) {
 
 # Output success message
 Write-Host "Users have been created successfully."
-
