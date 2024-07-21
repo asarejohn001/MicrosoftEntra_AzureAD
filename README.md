@@ -14,5 +14,9 @@ The script will:
 7. Create a variale to import the csv file.
 8. Anoter variable to track errors so we can later on create a log file.
 9. Loops through the [csv file](New%20Hires.csv) and create each user account using the information from the file.
+10. Disconnects from Microsoft graph
 
 ## Deprovision
+The [Deprovision User Account script](DeprovisionUserAccount.ps1) will delete user's account from Microsoft Entra. The script will:
+1. Repeat steps 1 to 8 from the [User Account Provision script](UserAccountProvision.ps1).
+2. Loop through the a csv file containing the UPN
