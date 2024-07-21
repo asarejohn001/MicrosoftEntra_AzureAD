@@ -32,6 +32,17 @@ $users = Import-Csv -Path $csvPath
 # Initialize error count
 $errorCount = 0
 
+# Function to log errors with a timestamp
+function Log-Error {
+    param (
+        [string]$message,
+        [string]$logFilePath
+    )
+    $dateTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logMessage = "$dateTime - $message"
+    Add-Content -Path $logFilePath -Value $logMessage
+}
+
 # Loop through each user in the CSV
 foreach ($user in $users) {
     try {
@@ -60,6 +71,9 @@ foreach ($user in $users) {
             passwordProfile = $passwordProfile
         }
         $newUser = New-MgUser -BodyParameter $userDetails
+        $successMessage = "Created user: $($user.UserPrincipalName)"
+        Log-Error -message $successMessage -logFilePath $errorLogPath
+        Write-Host "successfully created accounts"
 
         # Delay for about 1 minite to ensure the account is fully created
         Start-Sleep -Seconds 60
@@ -73,9 +87,9 @@ foreach ($user in $users) {
     } catch {
         # Log the error to a file and increment the error count
         $errorMessage = "Error creating user $($user.FirstName) $($user.LastName): $($_.Exception.Message)"
-        Add-Content -Path $errorLogPath -Value $errorMessage
+        Log-Error -message $errorMessage -logFilePath $errorLogPath
         $errorCount++
-        Write-Host $errorMessage
+        Write-Host "There were issues creating the accounts. Check the log file for more details"
         break
     }
 }
