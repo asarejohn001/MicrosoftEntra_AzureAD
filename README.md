@@ -9,8 +9,8 @@ The script will:
 4. [Connect](https://learn.microsoft.com/en-us/powershell/microsoftgraph/get-started?view=graph-powershell-1.0) to tenant.
 5. Saved the csv file containing the new hire info into a variable.
 6. Declare a path to log any errors and success. This will help investigation task.
-    > [!IMPORTANT]  
-    > Make sure you change the path to where you have saved your csv file and where you have created your txt file for the logs.
+> [!IMPORTANT]  
+> Make sure you change the path to where you have saved your csv file and where you have created your txt file for the logs.
 7. Create a variale to import the csv file.
 8. Anoter variable to track errors so we can later on create a log file.
 9. Loops through the [csv file](New%20Hires.csv) and create each user account using the information from the file.
